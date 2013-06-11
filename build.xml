@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="org.opensajux.entities" default="build-jar">
+
+	<property name="appengine.sdk.dir" location="C:\appEngineIDE\plugins\com.google.appengine.eclipse.sdkbundle_1.7.5\appengine-java-sdk-1.7.5" />
+	<import file="${appengine.sdk.dir}/config/user/ant-macros.xml" />
+
+	<target name="default" depends="dist" />
+
+	<path id="project.classpath">
+		<pathelement path="bin" />
+		<fileset dir="${appengine.sdk.dir}/lib">
+			<include name="shared/**/*.jar" />
+		</fileset>
+		<fileset dir="${appengine.sdk.dir}/lib/user">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<target name="compile">
+		<mkdir dir="bin" />
+		<copy todir="bin">
+			<fileset dir="src">
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
+		<javac srcdir="src" destdir="bin" classpathref="project.classpath" debug="on" />
+	</target>
+	
+	<target name="build-jar">
+		<jar basedir="bin" destfile="dist\com.opensajux.entities.jar" />
+	</target>
+	
+	<target name="dist">
+		<enhance verbose="true" failonerror="true">
+			<classpath>
+				<pathelement path="${appengine.tools.classpath}" />
+				<pathelement path="dist\com.opensajux.weblet.webcontent-pre.jar" />
+			</classpath>
+			<fileset dir="bin" includes="**/*.class" />
+		</enhance>
+		<jar basedir="bin" destfile="dist\com.opensajux.weblet.webcontent.jar" />
+	</target>
+	
+	<target name="clean">
+		<delete dir="bin" />
+	</target>
+</project>
